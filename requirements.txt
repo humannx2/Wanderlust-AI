@@ -1,0 +1,7 @@
+langchain
+groq
+streamlit
+vercel
+flask
+flask-cors
+flask-sqlalchemy
