@@ -3,9 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import openai
 from crewai import Crew
-from agents import activity_finder, activity_moderator
+from agents import activity_finder, activity_moderator, quest_creator, quest_moderator
 from tools import location
-from tasks import activity_finder_task, activity_moderator_task
+from tasks import activity_finder_task, activity_moderator_task, quest_creator_task, quest_moderator_task
 import json
 
 # Initialize Flask app
@@ -24,6 +24,14 @@ crew = Crew(
     verbose=True,
     memory=True
 )
+
+crew_quest = Crew(
+    agents=[quest_creator,quest_moderator], 
+    tasks=[quest_creator_task,quest_moderator_task],
+    verbose=True,
+    memory=True
+)
+
 
 @app.route('/generate_activity',methods={'POSt'})
 def generate_activities():
@@ -46,6 +54,30 @@ def generate_activities():
 
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
+
+
+@app.route('/quest',methods={'POSt'})
+def generate_quest():
+    try:
+        data = request.get_json()
+        location_input = data.get('location', '')
+        category_input = data.get('category', '')
+        time_input = data.get('time', '')
+
+        inputs = {
+            "location": location_input,
+            "category": category_input,
+            "time": time_input
+        }
+
+        result = crew_quest.kickoff(inputs=inputs)
+        output=result.raw
+
+        return jsonify({"result": output})
+
+    except ValueError as e:
+        return jsonify({"error": str(e)}), 400
+
 
 @app.route('/')
 def home():
