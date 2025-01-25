@@ -2,6 +2,10 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import openai
+from crewai import Crew
+from agents import activity_finder, activity_moderator
+from tools import location
+from tasks import activity_finder_task, activity_moderator_task
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -17,22 +21,6 @@ db = SQLAlchemy(app)
 # OpenAI API key (replace with your actual key)
 openai.api_key = "your-openai-api-key"
 
-# Import models
-class Activity(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    category = db.Column(db.String(50), nullable=False)
-    difficulty = db.Column(db.String(10), nullable=False)
-
-class Quest(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
-    steps = db.Column(db.Text, nullable=False)  # Store steps as JSON or comma-separated
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    points = db.Column(db.Integer, default=0)
 
 @app.route('/')
 def home():
@@ -41,3 +29,5 @@ def home():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
+
