@@ -4,6 +4,7 @@ import os
 load_dotenv()
 
 ser_api_key=os.getenv("SERPER_API_KEY")
+# location = SerperDevTool()
 
 location = SerperDevTool(
     search_url="https://google.serper.dev/maps",

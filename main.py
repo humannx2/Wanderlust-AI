@@ -4,8 +4,8 @@ from tools import location
 from tasks import activity_finder_task, activity_moderator_task
 
 crew = Crew(
-    agents=[activity_finder, activity_moderator], 
-    tasks=[activity_finder_task, activity_moderator_task],
+    agents=[activity_finder,activity_moderator], 
+    tasks=[activity_finder_task,activity_moderator_task],
     verbose=True,
     memory=True
 )
