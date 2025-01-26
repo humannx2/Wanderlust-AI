@@ -28,7 +28,7 @@ crew_quest = Crew(
     agents=[quest_creator,quest_moderator], 
     tasks=[quest_creator_task,quest_moderator_task],
     verbose=True,
-    memory=True
+    memory=False
 )
 
 inputs = {
